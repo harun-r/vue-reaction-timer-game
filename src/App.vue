@@ -1,47 +1,49 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+<template>
+  <div class="header">
+    <h3>Ninja Reaction Timer</h3>
+    <button @click="start" :disabled="isPlaying">play</button>
+
+  </div>
+  <div class="block-wrap" v-if="isPlaying">
+    <Block :delay="delay" @end="endGame"/>
+  </div>
+  <div class="result-block" v-if="showResult">
+    <Result :score="score"/>
+  </div>
+</template>
+<script>
+import Block from "@/components/timer/Block.vue";
+import Result from "@/components/timer/Result.vue";
+export default {
+  name: "App",
+  components: {
+    Block,
+    Result
+  },
+  data() {
+    return{
+      isPlaying: false,
+      delay: null,
+      score: null,
+      showResult: false
+    }
+  },
+  methods:{
+    start(){
+      this.delay = 2000 + Math.random() * 5000
+      this.isPlaying = true
+      this.showResult = false
+    },
+    endGame(reactionTime){
+      this.score = reactionTime
+      this.isPlaying = false
+      this.showResult = true
+    }
+  }
+}
+
 </script>
 
-<template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
-</template>
-
 <style scoped>
-header {
-  line-height: 1.5;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
